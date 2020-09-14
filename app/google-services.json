@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "321920227652",
+    "firebase_url": "https://lee-consulting-bd99d.firebaseio.com",
+    "project_id": "lee-consulting-bd99d",
+    "storage_bucket": "lee-consulting-bd99d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321920227652:android:b9583c5a6151d555b59f11",
+        "android_client_info": {
+          "package_name": "com.lennydennis.leeconsulting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "321920227652-fnmpm7akv4p1s1jfp6isf80a02rkpcmr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lennydennis.leeconsulting",
+            "certificate_hash": "90d849f3d70a5ace67a67b39962c4e3239bdb84b"
+          }
+        },
+        {
+          "client_id": "321920227652-a834qfca09le41v6eddvvb5ct22hf0gj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBNwENJKrqeWThmYUTIYIQ4PBTtyU7yOCE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "321920227652-a834qfca09le41v6eddvvb5ct22hf0gj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
