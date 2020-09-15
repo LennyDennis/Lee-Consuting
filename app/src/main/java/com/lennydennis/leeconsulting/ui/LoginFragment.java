@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.lennydennis.leeconsulting.R;
 import com.lennydennis.leeconsulting.databinding.FragmentLoginBinding;
+import com.lennydennis.leeconsulting.util.FragmentUtility;
 
 
 public class LoginFragment extends Fragment {
@@ -47,6 +48,8 @@ public class LoginFragment extends Fragment {
         mFragmentLoginBinding.tvRegisterLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RegistrationFragment registrationFragment = new RegistrationFragment();
+                FragmentUtility.replaceFragment(getActivity(),registrationFragment, R.id.fragment_host,true);
 
             }
         });
@@ -67,11 +70,6 @@ public class LoginFragment extends Fragment {
 
         return mFragmentLoginBinding.getRoot();
     }
-
-    private boolean isEmpty(String string){
-        return string.equals("");
-    }
-
 
     private void showDialog(){
         mFragmentLoginBinding.loginProgressBar.setVisibility(View.VISIBLE);

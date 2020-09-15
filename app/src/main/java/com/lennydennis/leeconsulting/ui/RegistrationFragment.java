@@ -39,7 +39,7 @@ public class RegistrationFragment extends Fragment {
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isEmpty(registrationEmail) && isEmpty(registrationPassword) && isEmpty(confirmRegistrationPassword)){
+                if(!registrationEmail.isEmpty() && registrationPassword.isEmpty() && confirmRegistrationPassword.isEmpty()){
                     if(isValidDomain(registrationEmail)){
                         if(doStringsMatch(registrationPassword,confirmRegistrationPassword)){
 
@@ -73,10 +73,6 @@ public class RegistrationFragment extends Fragment {
 
     private boolean doStringsMatch(String s1, String s2){
         return s1.equals(s2);
-    }
-
-    private boolean isEmpty(String string){
-        return string.equals("");
     }
 
     private void showDialog(){
