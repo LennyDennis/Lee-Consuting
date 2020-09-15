@@ -116,7 +116,12 @@ public class LoginFragment extends Fragment {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if(user != null){
-                    Log.d(TAG, "onAuthStateChanged: User is logged in "+ user.getUid());
+                    if(user.isEmailVerified()){
+                        Log.d(TAG, "onAuthStateChanged: User is logged in "+ user.getUid());
+                    }else{
+                        Toast.makeText(getActivity(), "Check your verification link", Toast.LENGTH_SHORT).show();
+                        mFirebaseAuth.signOut();
+                    }
                 }else{
                     Log.d(TAG, "onAuthStateChanged: User not logged in");
                 }
