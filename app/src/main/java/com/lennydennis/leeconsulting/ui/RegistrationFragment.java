@@ -51,7 +51,7 @@ public class RegistrationFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 LoginFragment loginFragment = new LoginFragment();
-                FragmentUtility.replaceFragment(getActivity(),loginFragment,R.id.fragment_host,true);
+                FragmentUtility.replaceFragment(getActivity(), loginFragment, R.id.fragment_host, true);
             }
         });
 
@@ -61,17 +61,17 @@ public class RegistrationFragment extends Fragment {
                 mRegistrationEmail = mFragmentRegistrationBinding.etRegistrationEmail.getText().toString();
                 mRegistrationPassword = mFragmentRegistrationBinding.etRegistrationPassword.getText().toString();
                 mConfirmRegistrationPassword = mFragmentRegistrationBinding.etConfirmPassword.getText().toString();
-                if(!(mRegistrationEmail.isEmpty() && mRegistrationPassword.isEmpty() && mConfirmRegistrationPassword.isEmpty())){
-                    if(isValidDomain(mRegistrationEmail)){
-                        if(doStringsMatch(mRegistrationPassword, mConfirmRegistrationPassword)){
-                            registerNewUser(mRegistrationEmail,mRegistrationPassword);
-                        }else{
+                if (!(mRegistrationEmail.isEmpty() && mRegistrationPassword.isEmpty() && mConfirmRegistrationPassword.isEmpty())) {
+                    if (isValidDomain(mRegistrationEmail)) {
+                        if (doStringsMatch(mRegistrationPassword, mConfirmRegistrationPassword)) {
+                            registerNewUser(mRegistrationEmail, mRegistrationPassword);
+                        } else {
                             Toast.makeText(getActivity(), "Passwords do not Match", Toast.LENGTH_SHORT).show();
                         }
-                    }else{
+                    } else {
                         Toast.makeText(getActivity(), "Please Register with Company Email", Toast.LENGTH_SHORT).show();
                     }
-                }else{
+                } else {
                     Toast.makeText(getActivity(), "You must fill out all the fields", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -82,58 +82,77 @@ public class RegistrationFragment extends Fragment {
         return mFragmentRegistrationBinding.getRoot();
     }
 
-    private void registerNewUser(String email, String password){
+    private void registerNewUser(String email, String password) {
         showDialog();
         mFirebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mFirebaseAuth.getCurrentUser();
-                            Log.d(TAG, "onComplete: "+user);
-                            Toast.makeText(getActivity(), "User successfully registered", Toast.LENGTH_SHORT).show();
+                                           @Override
+                                           public void onComplete(@NonNull Task<AuthResult> task) {
+                                               if (task.isSuccessful()) {
+                                                   Log.d(TAG, "createUserWithEmail:success");
+                                                   FirebaseUser user = mFirebaseAuth.getCurrentUser();
+                                                   Log.d(TAG, "onComplete: " + user);
 
-                            mFirebaseAuth.signOut();
-                            LoginFragment loginFragment = new LoginFragment();
-                            FragmentUtility.replaceFragment(getActivity(),loginFragment,R.id.fragment_host,true);
+                                                   sendVerificationEmail();
+                                                   Toast.makeText(getActivity(), "User successfully registered", Toast.LENGTH_SHORT).show();
 
-                        }else {
-                            Toast.makeText(getActivity(), "registration:failure", Toast.LENGTH_SHORT).show();
-                        }
-                        hideDialog();
-                    }
-                }
-        );
+                                                   mFirebaseAuth.signOut();
+                                                   LoginFragment loginFragment = new LoginFragment();
+                                                   FragmentUtility.replaceFragment(getActivity(), loginFragment, R.id.fragment_host, true);
+
+                                               } else {
+                                                   Toast.makeText(getActivity(), "registration:failure", Toast.LENGTH_SHORT).show();
+                                               }
+                                               hideDialog();
+                                           }
+                                       }
+                );
 
     }
 
-    private boolean isValidDomain(String email){
+    private void sendVerificationEmail() {
+        FirebaseUser firebaseUser = mFirebaseAuth.getCurrentUser();
+        if (firebaseUser != null) {
+            firebaseUser.sendEmailVerification()
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if(task.isSuccessful()){
+                                Toast.makeText(getActivity(), "Sent email", Toast.LENGTH_SHORT).show();
+                            }else{
+                                Toast.makeText(getActivity(), "Email not sent", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
+    }
+
+    private boolean isValidDomain(String email) {
         Log.d(TAG, "isValidDomain: verifying email has correct domain: " + email);
         String domain = email.substring(email.indexOf("@") + 1).toLowerCase();
         Log.d(TAG, "isValidDomain: users domain: " + domain);
         return domain.equals(DOMAIN_NAME);
     }
 
-    private void redirectLoginScreen(){
+    private void redirectLoginScreen() {
     }
 
-    private boolean doStringsMatch(String s1, String s2){
+    private boolean doStringsMatch(String s1, String s2) {
         return s1.equals(s2);
     }
 
-    private void showDialog(){
+    private void showDialog() {
         registrationProgressBar.setVisibility(View.VISIBLE);
 
     }
 
-    private void hideDialog(){
-        if(registrationProgressBar.getVisibility() == View.VISIBLE){
+    private void hideDialog() {
+        if (registrationProgressBar.getVisibility() == View.VISIBLE) {
             registrationProgressBar.setVisibility(View.INVISIBLE);
         }
     }
 
-    private void hideSoftKeyboard(){
+    private void hideSoftKeyboard() {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
     }
 }
